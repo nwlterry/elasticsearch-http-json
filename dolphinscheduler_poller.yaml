@@ -1,0 +1,28 @@
+# Example YAML config (editable in Fleet UI or policy file)
+inputs:
+  - type: httpjson
+    id: dolphinscheduler_poller
+    name: DolphinScheduler API Poller
+    data_stream:
+      namespace: monitoring
+    use_output: default  # Or custom output to Logstash
+    poll_timeout: 30s
+    request:
+      url: http://your-ds-host:12345/dolphinscheduler/projects/{{project_code}}/process-instances
+      method: get
+      headers:
+        token: "{{your_token}}"  # Use secrets/vars
+      query:
+        pageNo: 1
+        pageSize: 100
+        stateType: RUNNING_EXECUTION
+    response:
+      format: json
+      extract:
+        - |-
+          {{ .body.data.totalList }}  # Split array into events
+    pagination:
+      type: cursor  # Or offset/page
+      cursor: "{{ .last_event.process_id }}"  # Incremental via field
+    transforms: []  # Optional JSONata, e.g., rename fields
+    schedule: { interval: 1m }  # Poll every minute
