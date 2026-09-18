@@ -1,18 +1,17 @@
 # elasticsearch-http-json
 
-Example Elastic Agent `httpjson` input that polls the DolphinScheduler REST API for running process instances.
+Example Elastic Agent `httpjson` input that polls DolphinScheduler for running process instances.
 
-## File
+## Layout
 
-`dolphinscheduler_poller.yaml`
+```
+manifests/dolphinscheduler_poller.yaml
+GROUP.md
+README.md
+```
 
-- Input type: `httpjson`
-- Data stream namespace: `monitoring`
-- Poll interval: 1 minute
-- GET `.../dolphinscheduler/projects/{{project_code}}/process-instances`
-- Splits `body.data.totalList` into events
-- Cursor pagination via `process_id`
+Replace host, `{{project_code}}`, and token. Prefer Fleet secrets for the token. Related dashboards: [dolphinscheduler-dashboards](https://github.com/nwlterry/dolphinscheduler-dashboards).
 
-Replace `your-ds-host`, `{{project_code}}`, and `{{your_token}}` before using. Prefer Fleet secrets/vars for the token rather than a plaintext header.
+---
 
-Related dashboards: [dolphinscheduler-dashboards](https://github.com/nwlterry/dolphinscheduler-dashboards).
+See [GROUP.md](GROUP.md) for sibling repositories. Catalog: https://github.com/nwlterry/nwlterry
